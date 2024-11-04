@@ -1,75 +1,57 @@
-# One-Click Docker Server Setup with AI Recommendations
+# Docker Apps Manager
 
-A lightweight script to set up a dedicated Ubuntu 22.04 server for hosting multiple Docker Compose applications with automatic SSL and AI-powered configuration recommendations.
+CLI tool to automatically deploy and manage multiple Docker Compose applications on a single Ubuntu 22.04 server with AI-powered recommendations.
 
-## Requirements:
-- **Ubuntu 22.04 LTS**
-- **Root access**
-- **Domain names pointed to your server (for SSL)**
-- **OpenAI API key (optional - for AI recommendations)**
+## Quick Start
 
-## Quick Start:
 1. Clone this repository
-2. Run: `sudo ./install.sh`
-3. Export your OpenAI key (optional):
-   ```bash
-   export OPENAI_API_KEY="your-key-here"
+2. Add your OpenAI API key to .env file:
+   ```
+   OPENAI_API_KEY=your_key_here
+   ```
+3. Run the installer:
+   ```
+   ./install.sh
    ```
 
-## Adding New Applications:
-1. Create a new directory for your app:
-   ```bash
-   mkdir -p /opt/docker-apps/your-app-name
-   ```
+## Usage
 
-2. Get AI recommendations for your app (optional):
-   ```bash
-   python3 src/ai_recommendations.py
-   ```
+Deploy a new app:
+```
+docker-apps deploy myapp /path/to/docker-compose.yml
+```
 
-3. Copy your `docker-compose.yml` to the new directory:
-   ```bash
-   cp your-docker-compose.yml /opt/docker-apps/your-app-name/
-   ```
+List running apps:
+```
+docker-apps list
+```
 
-4. Add your app to the nginx-proxy network by adding this to your `docker-compose.yml`:
-   ```yaml
-   networks:
-     - nginx-proxy-network
+Stop an app:
+```
+docker-apps stop myapp
+```
 
-   networks:
-     nginx-proxy-network:
-       external: true
-   ```
+## Features
 
-5. Start your application:
-   ```bash
-   cd /opt/docker-apps/your-app-name
-   docker compose up -d
-   ```
+- Automatic Docker and SSL setup
+- AI recommendations for container optimization
+- Nginx reverse proxy configuration
+- Multiple apps isolation
+- Automatic network configuration
+- SSL certificate management
 
-## SSL Certificates:
-- Certificates are stored in `/opt/ssl-certs`
-- To add a new certificate:
-  ```bash
-  certbot certonly --nginx -d your-domain.com
-  ```
+## Requirements
 
-## Directory Structure:
-- `/opt/docker-apps/`           - All Docker applications
-- `/opt/docker-apps/nginx-proxy` - Nginx reverse proxy
-- `/opt/ssl-certs/`             - SSL certificates
+- Ubuntu 22.04
+- Python 3.8+
+- OpenAI API key (or use Hugging Face offline mode)
 
-## Troubleshooting:
-- Check nginx logs: `docker logs nginx-proxy`
-- Verify network: `docker network ls`
-- Check SSL certs: `ls /opt/ssl-certs`
+## Directory Structure
 
-## Security Notes:
-- All traffic is automatically redirected to HTTPS
-- SSL configuration uses modern security standards
-- Container isolation through dedicated networks
-- Regular updates recommended
+- /opt/docker-apps/{app_name} - Where apps are deployed
+- config/ - Nginx and Docker templates
+- src/ - Core Python modules
 
-## For issues or contributions:
-[Your GitHub repository URL] # easysetup4u
+## License
+
+MIT 

@@ -1,8 +1,9 @@
 #!/bin/bash
+set -e
 
 # Install certbot
-apt-get install -y certbot python3-certbot-nginx
+sudo apt-get update
+sudo apt-get install -y certbot python3-certbot-nginx
 
-# Create directory for SSL certificates
-mkdir -p /opt/ssl-certs
-chmod 755 /opt/ssl-certs 
+# Setup SSL renewal cron job
+(crontab -l 2>/dev/null; echo "0 12 * * * /usr/bin/certbot renew --quiet") | crontab - 

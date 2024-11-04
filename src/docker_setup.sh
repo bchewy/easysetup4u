@@ -1,19 +1,14 @@
 #!/bin/bash
+set -e
 
 # Install Docker
-apt-get update
-apt-get install -y ca-certificates curl gnupg lsb-release
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-apt-get update
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-# Create Docker network for proxy
-docker network create nginx-proxy-network
-
-# Start nginx-proxy container
-cd /opt/docker-apps/nginx-proxy
-docker compose up -d 
+# Create docker network for reverse proxy
+docker network create proxy-network || true
