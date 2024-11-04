@@ -1,0 +1,10 @@
+.
+├── config/
+│   ├── docker-compose-template.yml
+│   └── nginx.conf
+├── src/
+│   ├── docker_setup.sh
+│   ├── ssl_setup.sh
+│   └── ai_recommendations.py
+├── install.sh
+└── README.md 
